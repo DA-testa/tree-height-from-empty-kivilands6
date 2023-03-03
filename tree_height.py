@@ -5,13 +5,20 @@ import threading
 import numpy
 
 def compute_height(n, parents):
-    heights = {i: 0 for i in range(n)}
-    for i in range(n-1, -1, -1):
-        parent = parents[i]
-        if parent == -1:
-            heights[i] = 1
-        else:
-            heights[parent] = max(heights[parent], heights[i] + 1)
+    heights = {}
+    for i in range(n):
+        if i not in heights:
+            height = 1
+            node = i
+            while parents[node] != -1:
+                parent = parents[node]
+                if parent not in heights:
+                    node = parent
+                    height += 1
+                else:
+                    height += heights[parent]
+                    break
+            heights[i] = height
     return max(heights.values())
 
 def main():
